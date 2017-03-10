@@ -8,8 +8,6 @@ from pip.download import PipSession
 from pip.req import parse_requirements as requirements
 from setuptools import Command, setup
 
-from runtests import main
-
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 if sys.version_info[0] == 2:
@@ -39,7 +37,6 @@ class Dist(Command):
             shutil.rmtree('dist', ignore_errors=True)
             shutil.rmtree('{{ cookiecutter.project_slug }}.egg-info', ignore_errors=True)
 
-        self.run_command('test')
         self.run_command('sdist')
         self.run_command('bdist_wheel')
 
@@ -55,6 +52,8 @@ class Test(Command):
         pass
 
     def run(self):
+        from runtests import main
+
         return main()
 
 
