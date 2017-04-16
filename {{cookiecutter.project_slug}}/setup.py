@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-import shutil
 import sys
 
 from pip.download import PipSession
 from pip.req import parse_requirements as requirements
-from setuptools import Command, setup
+from setuptools import setup
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,48 +17,9 @@ def parse_requirements(f):
     return [str(r.req) for r in requirements(f, session=PipSession())]
 
 
-class Dist(Command):
-    description = 'Create dist packages'
-    user_options = [
-        ('clean', 'c', 'clean dist directories before build (default: false)')
-    ]
-    boolean_options = ['clean']
-
-    def initialize_options(self):
-        self.clean = False
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        if self.clean:
-            shutil.rmtree('build', ignore_errors=True)
-            shutil.rmtree('dist', ignore_errors=True)
-            shutil.rmtree('{{ cookiecutter.project_slug }}.egg-info', ignore_errors=True)
-
-        self.run_command('sdist')
-        self.run_command('bdist_wheel')
-
-
-class Test(Command):
-    description = 'Static code analysis and tests'
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        from runtests import main
-
-        return main()
-
-
 # Read requirements
 _requirements_file = os.path.join(BASE_DIR, 'requirements.txt')
-_tests_requirements_file = os.path.join(BASE_DIR, 'tests/requirements.txt')
+_tests_requirements_file = os.path.join(BASE_DIR, 'requirements-tests.txt')
 _REQUIRES = parse_requirements(_requirements_file)
 _TESTS_REQUIRES = parse_requirements(_tests_requirements_file)
 
@@ -110,15 +70,12 @@ setup(
             'twine',
             'bumpversion',
             'pre-commit',
-        ] + _TESTS_REQUIRES
+            'sphinx',
+            'sphinx_rtd_theme'
+        ] + _TESTS_REQUIRES,
     },
     license='GPLv3',
     zip_safe=False,
     keywords=_KEYWORDS,
     classifiers=_CLASSIFIERS,
-    test_suite='nose.collector',
-    cmdclass={
-        'test': Test,
-        'dist': Dist,
-    },
 )

@@ -5,6 +5,5 @@ include CONTRIBUTORS.rst
 include requirements.txt
 include runtests.py
 graft {{ cookiecutter.app_slug }}
-graft tests
 global-exclude __pycache__
 global-exclude *.py[co]
