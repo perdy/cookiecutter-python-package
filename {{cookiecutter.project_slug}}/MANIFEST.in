@@ -3,7 +3,8 @@ include CHANGELOG
 include README.rst
 include CONTRIBUTORS.rst
 include requirements.txt
-include runtests.py
+include requirements-tests.txt
+include build.py
 graft {{ cookiecutter.app_slug }}
 global-exclude __pycache__
 global-exclude *.py[co]

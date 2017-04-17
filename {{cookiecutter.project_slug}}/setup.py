@@ -70,8 +70,6 @@ setup(
             'twine',
             'bumpversion',
             'pre-commit',
-            'sphinx',
-            'sphinx_rtd_theme'
         ] + _TESTS_REQUIRES,
     },
     license='GPLv3',
